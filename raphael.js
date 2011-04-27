@@ -3452,7 +3452,11 @@
             if (!attrs.length) return this;
             attrs.sort(sortByKey);
             if (attrs[0].key) {
-                attrs.unshift({key: 0, value: element.attr()});
+                var ea = element.attr();
+                delete ea.translation;
+                delete ea.scale;
+                delete ea.rotation;
+                attrs.unshift({key: 0, value: ea});
             }
             for (i = 0, ii = attrs[length]; i < ii; i++) {
                 keyframesRun(attrs[i].value, element, ms / 100 * attrs[i].key, ms / 100 * (attrs[i - 1] && attrs[i - 1].key || 0), attrs[i - 1] && attrs[i - 1].value.callback);
