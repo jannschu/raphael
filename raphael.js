@@ -66,7 +66,7 @@
         paper = {},
         push = "push",
         ISURL = /^url\(['"]?([^\)]+?)['"]?\)$/i,
-        colourRegExp = /^\s*((#[a-f\d]{6})|(#[a-f\d]{3})|rgba?\(\s*([\d\.]+%?\s*,\s*[\d\.]+%?\s*,\s*[\d\.]+(?:%?\s*,\s*[\d\.]+)?)%?\s*\)|hsba?\(\s*([\d\.]+(?:deg|\xb0|%)?\s*,\s*[\d\.]+%?\s*,\s*[\d\.]+(?:%?\s*,\s*[\d\.]+)?)%?\s*\)|hsla?\(\s*([\d\.]+(?:deg|\xb0|%)?\s*,\s*[\d\.]+%?\s*,\s*[\d\.]+(?:%?\s*,\s*[\d\.]+)?)%?\s*\))\s*$/i,
+        colourRegExp = /^\s*((#[a-f\d]{6})|(#[a-f\d]{3})|rgba?\(\s*([\d\.]+%?\s*,\s*[\d\.]+%?\s*,\s*[\d\.]+%?\s*(?:,\s*[\d\.]+%?\s*?))\)|hsba?\(\s*([\d\.]+(?:deg|\xb0|%)?\s*,\s*[\d\.]+%?\s*,\s*[\d\.]+(?:%?\s*,\s*[\d\.]+)?)%?\s*\)|hsla?\(\s*([\d\.]+(?:deg|\xb0|%)?\s*,\s*[\d\.]+%?\s*,\s*[\d\.]+(?:%?\s*,\s*[\d\.]+)?)%?\s*\))\s*$/i,
         isnan = {"NaN": 1, "Infinity": 1, "-Infinity": 1},
         bezierrg = /^(?:cubic-)?bezier\(([^,]+),([^,]+),([^,]+),([^\)]+)\)/,
         round = math.round,
@@ -964,6 +964,7 @@
                 if (dot.color.error) {
                     return null;
                 }
+                if (dot.color.opacity !== undefined) dot.opacity = dot.color.opacity;
                 dot.color = dot.color.hex;
                 par[2] && (dot.offset = par[2] + "%");
                 dots[push](dot);
@@ -1162,10 +1163,12 @@
             SVG.defs[appendChild](el);
             for (var i = 0, ii = dots[length]; i < ii; i++) {
                 var stop = $("stop");
-                $(stop, {
+                var stopAttributes = {
                     offset: dots[i].offset ? dots[i].offset : !i ? "0%" : "100%",
                     "stop-color": dots[i].color || "#fff"
-                });
+                };
+                if (dots[i].opacity !== undefined) stopAttributes["stop-opacity"] = dots[i].opacity;
+                $(stop, stopAttributes);
                 el[appendChild](stop);
             }
             $(o, {
