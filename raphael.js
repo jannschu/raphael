@@ -3449,6 +3449,7 @@
                 attr.key = toInt(key, 10);
                 attrs.push(attr);
             }
+            if (!attrs.length) return this;
             attrs.sort(sortByKey);
             if (attrs[0].key) {
                 attrs.unshift({key: 0, value: element.attr()});
