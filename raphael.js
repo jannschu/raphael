@@ -3408,8 +3408,9 @@
                                 diff[attr] = [values[0] / ms, values[1] / ms];
                             break;
                             case "rotation":
-                                from[attr] = (from2[1] == values[1] && from2[2] == values[2]) ? from2 : [0, values[1], values[2]];
-                                diff[attr] = [(values[0] - from[attr][0]) / ms, 0, 0];
+                                from[attr] = [toInt(from2[0]), values[1], values[2]];
+                                diff[attr] = [values[0] / ms, 0, 0];
+                                values[0] = (toInt(from2[0]) + toInt(values[0])) % 360
                             break;
                             case "scale":
                                 params[attr] = values;
